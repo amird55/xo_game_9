@@ -3,31 +3,52 @@
     <h2>I am player <%= timesShown %> </h2>
     <table>
         <tr>
-            <td id="1"></td>
-            <td id="2"></td>
-            <td id="3"></td>
+            <td id="1" onclick="sendMove(this);"></td>
+            <td id="2" onclick="sendMove(this);"></td>
+            <td id="3" onclick="sendMove(this);"></td>
         </tr>
         <tr>
-            <td id="4"></td>
-            <td id="5"></td>
-            <td id="6"></td>
+            <td id="4" onclick="sendMove(this);"></td>
+            <td id="5" onclick="sendMove(this);"></td>
+            <td id="6" onclick="sendMove(this);"></td>
         </tr>
         <tr>
-            <td id="7"></td>
-            <td id="8"></td>
-            <td id="9"></td>
+            <td id="7" onclick="sendMove(this);"></td>
+            <td id="8" onclick="sendMove(this);"></td>
+            <td id="9" onclick="sendMove(this);"></td>
         </tr>
     </table>
     <br><br>
     <script>
+    var player= <%= timesShown %>;
     function SetP1(cell){
         document.getElementById(cell).classList.add("p1");
     }
     function SetP2(cell){
         document.getElementById(cell).classList.add("p2");
     }
-    SetP1("2");
-    SetP2("7");
-    
+    // SetP1("2");
+    // SetP2("7");
+async function sendMove(el){
+    let cell=el.id;
+    let response = await fetch(`/GetMove/${player}/${cell}`);
+    let data = await response.json();
+    if(data.player%2==1){
+        SetP1(data.cell);
+    } else{
+        SetP2(data.cell);
+    }
+}
+async function fetchText() {
+    let response = await fetch('/GetLast');
+    let data = await response.json();
+    console.log(data);
+    if(data.player%2==1){
+        SetP1(data.cell);
+    } else{
+        SetP2(data.cell);
+    }
+}
+fetchText();
     </script>
 <%- include("footer.ejs") %>

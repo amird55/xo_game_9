@@ -1,17 +1,25 @@
 const express = require('express'); //Import the express dependency
 const port = 4444;                  //Save the port number where your server will be listening
 const app = express();//Instantiate an express app, the main work horse of this server
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
 app.set("view engine", "ejs");
 var cnt=0;
 
 app.use('/CSS', express.static(__dirname + "/CSS"));
 
+ const router = express.Router();
+
 let lastMove={"player":1,"cell":5};
 router.get('/GetLast',function(req,res){
   res.send(lastMove);
 });
-
- const router = express.Router();
+router.get('/GetMove/:p/:c',function(req,res){
+  lastMove.player=req.params.p;
+  lastMove.cell=req.params.c;
+  res.send(lastMove);
+});
 router.get('/', (req, res) => {        //get requests to the root ("/") will route here
       cnt++;
       res.render("index", {
