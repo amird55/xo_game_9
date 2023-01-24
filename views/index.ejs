@@ -1,0 +1,33 @@
+<%- include("header.ejs") %>
+    <h1>X-O game</h1>
+    <h2>I am player <%= timesShown %> </h2>
+    <table>
+        <tr>
+            <td id="1"></td>
+            <td id="2"></td>
+            <td id="3"></td>
+        </tr>
+        <tr>
+            <td id="4"></td>
+            <td id="5"></td>
+            <td id="6"></td>
+        </tr>
+        <tr>
+            <td id="7"></td>
+            <td id="8"></td>
+            <td id="9"></td>
+        </tr>
+    </table>
+    <br><br>
+    <script>
+    function SetP1(cell){
+        document.getElementById(cell).classList.add("p1");
+    }
+    function SetP2(cell){
+        document.getElementById(cell).classList.add("p2");
+    }
+    SetP1("2");
+    SetP2("7");
+    
+    </script>
+<%- include("footer.ejs") %>
