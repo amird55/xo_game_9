@@ -11,13 +11,20 @@ app.use('/CSS', express.static(__dirname + "/CSS"));
 
  const router = express.Router();
 
-let lastMove={"player":1,"cell":5};
+var board=[[0,0,0],[0,0,0],[0,0,0]]
+var turn=1;
+let lastMove={"GameFinished":0};
 router.get('/GetLast',function(req,res){
   res.send(lastMove);
 });
 router.get('/GetMove/:p/:c',function(req,res){
-  lastMove.player=req.params.p;
-  lastMove.cell=req.params.c;
+  if(turn%2 == req.params.p%2){
+    let c=req.params.c;
+    lastMove.player=req.params.p;
+    lastMove.cell=req.params.c;
+    board[c/3][c%3] = req.params.p;
+    turn++;
+  }
   res.send(lastMove);
 });
 router.get('/', (req, res) => {        //get requests to the root ("/") will route here

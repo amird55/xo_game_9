@@ -20,6 +20,7 @@
     </table>
     <br><br>
     <script>
+    var currInterval;
     var player= <%= timesShown %>;
     function SetP1(cell){
         document.getElementById(cell).classList.add("p1");
@@ -27,28 +28,37 @@
     function SetP2(cell){
         document.getElementById(cell).classList.add("p2");
     }
-    // SetP1("2");
-    // SetP2("7");
-async function sendMove(el){
-    let cell=el.id;
-    let response = await fetch(`/GetMove/${player}/${cell}`);
-    let data = await response.json();
-    if(data.player%2==1){
-        SetP1(data.cell);
-    } else{
-        SetP2(data.cell);
+    async function sendMove(el){
+        let cell=el.id;
+        let response = await fetch(`/GetMove/${player}/${cell}`);
+        let data = await response.json();
+        if(data.player%2==1){
+            SetP1(data.cell);
+        } else{
+            SetP2(data.cell);
+        }
+        StartCheckingStatus();
     }
-}
-async function fetchText() {
-    let response = await fetch('/GetLast');
-    let data = await response.json();
-    console.log(data);
-    if(data.player%2==1){
-        SetP1(data.cell);
-    } else{
-        SetP2(data.cell);
+    async function fetchLast() {
+        let response = await fetch('/GetLast');
+        let data = await response.json();
+        console.log(data);
+        if(data.player != null){
+            if(data.player%2==1){
+                SetP1(data.cell);
+            } else{
+                SetP2(data.cell);
+            }
+            if(data.player != player){//my turn
+                StopGetStatus();
+            }
+        }
     }
-}
-fetchText();
+    function StartCheckingStatus(){
+        currInterval=setInterval(fetchLast,500);
+    }
+    function StopGetStatus(){
+        clearInterval(currInterval);
+    }
     </script>
 <%- include("footer.ejs") %>
